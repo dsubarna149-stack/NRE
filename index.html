@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gesture Controlled Gallery</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="gallery-container">
+        <h2>হ্যান্ড জেসচার গ্যালারি</h2>
+        <img id="gallery-image" src="https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=800&q=80" alt="Gallery Image">
+        
+        <div class="controls">
+            <button onclick="prevImage()">Previous</button>
+            <button onclick="nextImage()">Next</button>
+        </div>
+        
+        <p class="status" id="status">ক্যামেরা লোড হচ্ছে...</p>
+    </div>
+
+    <video id="input_video" style="display:none;"></video>
+    
+    <canvas id="output_canvas" width="320" height="240" class="webcam-preview"></canvas>
+
+    <script src="script.js"></script>
+</body>
+</html>
