@@ -5,76 +5,110 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #121212;
+    font-family: 'Segoe UI', 'Roboto', sans-serif;
+    background-color: #000; /* সম্পূর্ণ কালো ব্যাকগ্রাউন্ড */
     color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
+    height: 100vh;
     overflow: hidden;
 }
 
-.gallery-container {
-    text-align: center;
-    background: #1e1e1e;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+.app-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
 
-h2 {
-    margin-bottom: 20px;
-    color: #4da6ff;
+/* মূল পেইন্টিং ক্যানভাস - ফুল স্ক্রিন */
+#paint_canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
 }
 
-#gallery-image {
-    width: 700px;
-    height: 450px;
-    object-fit: cover;
-    border-radius: 10px;
-    transition: opacity 0.3s ease-in-out;
-    border: 2px solid #333;
+/* UI উপাদানের ওভারলে */
+.ui-overlay {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    pointer-events: none; /* যাতে ক্যানভাসে ক্লিক করা যায় */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ui-overlay h1, .ui-overlay p, .ui-overlay .controls {
+    pointer-events: auto; /* এগুলো আবার ক্লিকযোগ্য করা হলো */
+}
+
+h1 {
+    font-size: 24px;
+    color: #fff;
+    /* নিয়ন টেক্সট শ্যাডো */
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #00ffff, 0 0 30px #00ffff, 0 0 40px #00ffff;
+}
+
+#status {
+    font-size: 14px;
+    color: #aaa;
 }
 
 .controls {
-    margin-top: 25px;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
-button {
-    padding: 10px 25px;
-    margin: 0 10px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    background-color: #4da6ff;
-    color: #121212;
-    border: none;
+#clearBtn {
+    padding: 8px 18px;
+    background: transparent;
+    color: #ff3333;
+    border: 2px solid #ff3333;
     border-radius: 5px;
-    transition: background-color 0.3s, transform 0.1s;
-}
-
-button:hover {
-    background-color: #3388dd;
-    transform: scale(1.05);
-}
-
-.status {
-    margin-top: 15px;
-    font-size: 15px;
-    color: #00ff00;
+    cursor: pointer;
     font-weight: bold;
+    font-size: 14px;
+    transition: all 0.3s;
+    /* লাল নিয়ন গ্লো */
+    box-shadow: 0 0 5px #ff3333;
 }
 
-/* নিচে ডানদিকে ক্যামেরার প্রিভিউ */
+#clearBtn:hover {
+    background-color: #ff3333;
+    color: #fff;
+    box-shadow: 0 0 15px #ff3333;
+}
+
+#colorPicker {
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    background: transparent;
+}
+
+.instruction {
+    margin-top: 15px;
+    font-size: 13px;
+    color: #888;
+    max-width: 300px;
+}
+
+/* ক্যামেরা প্রিভিউ (আয়নার মতো উল্টো) */
 .webcam-preview {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    border: 3px solid #4da6ff;
+    width: 160px;
+    height: 120px;
+    border: 2px solid #333;
     border-radius: 10px;
     background-color: #000;
-    transform: scaleX(-1); /* আয়নার মতো দেখার জন্য (Mirror effect) */
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    transform: scaleX(-1); /* Mirror effect */
+    z-index: 5;
 }
