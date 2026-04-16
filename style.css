@@ -1,0 +1,80 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #121212;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.gallery-container {
+    text-align: center;
+    background: #1e1e1e;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+}
+
+h2 {
+    margin-bottom: 20px;
+    color: #4da6ff;
+}
+
+#gallery-image {
+    width: 700px;
+    height: 450px;
+    object-fit: cover;
+    border-radius: 10px;
+    transition: opacity 0.3s ease-in-out;
+    border: 2px solid #333;
+}
+
+.controls {
+    margin-top: 25px;
+}
+
+button {
+    padding: 10px 25px;
+    margin: 0 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #4da6ff;
+    color: #121212;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+button:hover {
+    background-color: #3388dd;
+    transform: scale(1.05);
+}
+
+.status {
+    margin-top: 15px;
+    font-size: 15px;
+    color: #00ff00;
+    font-weight: bold;
+}
+
+/* নিচে ডানদিকে ক্যামেরার প্রিভিউ */
+.webcam-preview {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    border: 3px solid #4da6ff;
+    border-radius: 10px;
+    background-color: #000;
+    transform: scaleX(-1); /* আয়নার মতো দেখার জন্য (Mirror effect) */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
