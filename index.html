@@ -3,30 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gesture Controlled Gallery</title>
+    <title>Neon Hand Writer</title>
     <link rel="stylesheet" href="style.css">
     
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="gallery-container">
-        <h2>হ্যান্ড জেসচার গ্যালারি</h2>
-        <img id="gallery-image" src="https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=800&q=80" alt="Gallery Image">
+    <div class="app-container">
+        <canvas id="paint_canvas"></canvas>
         
-        <div class="controls">
-            <button onclick="prevImage()">Previous</button>
-            <button onclick="nextImage()">Next</button>
+        <div class="ui-overlay">
+            <h1>নিয়ন হ্যান্ড রাইটার</h1>
+            <p id="status">ক্যামেরা লোড হচ্ছে...</p>
+            <div class="controls">
+                <input type="color" id="colorPicker" value="#00ffff">
+                <button id="clearBtn">মুছে ফেলুন (Clear)</button>
+            </div>
+            <p class="instruction">ইন্সট্রাকশন: তর্জনী ও বুড়ো আঙুল একসাথে জোড়া লাগিয়ে (Pinch করে) স্ক্রিনে লিখুন।</p>
         </div>
         
-        <p class="status" id="status">ক্যামেরা লোড হচ্ছে...</p>
+        <video id="input_video" style="display:none;"></video>
+        <canvas id="webcam_canvas" class="webcam-preview"></canvas>
     </div>
-
-    <video id="input_video" style="display:none;"></video>
-    
-    <canvas id="output_canvas" width="320" height="240" class="webcam-preview"></canvas>
 
     <script src="script.js"></script>
 </body>
